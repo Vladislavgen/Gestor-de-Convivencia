@@ -1,0 +1,11 @@
+.asistente {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px dashed var(--color-primario);
+  border-radius: var(--radio);
+  background: #f8faff;
+}
+
+.asistente h2 {
+  margin-bottom: 0.25rem;
+}
