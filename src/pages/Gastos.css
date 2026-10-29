@@ -1,0 +1,71 @@
+.filtros {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.filtros label {
+  margin-top: 0;
+}
+
+.gasto-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gasto-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem 1rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.gasto-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.gasto-detalle {
+  font-size: 0.85rem;
+  color: var(--color-texto-suave);
+}
+
+.gasto-monto {
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.gasto-acciones {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.gasto-total {
+  margin: 1rem 0 0;
+  text-align: right;
+  color: var(--color-texto-suave);
+}
+
+@media (min-width: 761px) {
+  .gasto-item {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .gasto-acciones {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .filtros {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
