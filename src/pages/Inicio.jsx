@@ -8,6 +8,7 @@ import { calcularBalance } from "../utils/balance";
 import { claseCategoria, iconoCategoria } from "../utils/categorias";
 import { formatearFecha, formatearMonto, hoy, nombreMes } from "../utils/formato";
 import { resumirGastos } from "../services/gemini";
+import { cargarDatosDemo } from "../services/demo";
 import "./Inicio.css";
 
 function Inicio() {
@@ -19,6 +20,8 @@ function Inicio() {
   const [resumen, setResumen] = useState("");
   const [generando, setGenerando] = useState(false);
   const [errorIA, setErrorIA] = useState("");
+  const [cargandoDemo, setCargandoDemo] = useState(false);
+  const [errorDemo, setErrorDemo] = useState("");
 
   const nombreDe = (uid) => {
     const miembro = hogar.miembros.find((m) => m.uid === uid);
@@ -65,12 +68,54 @@ function Inicio() {
     }
   };
 
+  const cargarEjemplo = async () => {
+    const confirmar = window.confirm(
+      "Se van a agregar 4 miembros de ejemplo y tres meses de gastos, pagos y tareas. ¿Continuar?",
+    );
+    if (!confirmar) return;
+
+    setErrorDemo("");
+    setCargandoDemo(true);
+    try {
+      await cargarDatosDemo(hogar, usuario);
+    } catch (err) {
+      console.error(err);
+      setErrorDemo("No se pudieron cargar los datos de ejemplo. Intentá de nuevo.");
+    } finally {
+      setCargandoDemo(false);
+    }
+  };
+
   if (cargando) {
     return <p className="cargando">Cargando...</p>;
   }
 
+  const hogarVacio = gastos.length === 0 && tareas.length === 0;
+
   return (
     <div className="inicio">
+      {hogarVacio && (
+        <div className="card inicio-demo">
+          <h2>¿Querés ver la app con datos?</h2>
+          <p className="ayuda">
+            Podés cargar un hogar de ejemplo: cinco personas que comparten un
+            depto, con tres meses de gastos, pagos entre ellos y tareas. Después
+            podés editar o borrar lo que quieras.
+          </p>
+          {errorDemo && <p className="error">{errorDemo}</p>}
+          <div className="acciones">
+            <button
+              type="button"
+              className="btn btn-primario"
+              onClick={cargarEjemplo}
+              disabled={cargandoDemo}
+            >
+              {cargandoDemo ? "Cargando..." : "Cargar datos de ejemplo"}
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="encabezado">
         <div>
           <h1>Hola, {nombreUsuario}</h1>

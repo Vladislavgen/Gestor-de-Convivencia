@@ -32,7 +32,9 @@ Una cuenta pertenece a un solo hogar.
 | RF-14 | Gastos por categoría | El balance muestra el total y el porcentaje de cada categoría en el período elegido. |
 | RF-15 | Transferencias | Se muestra la lista de transferencias ("A le pasa X a B") que deja los saldos en cero. |
 | RF-16 | Pagos entre miembros | El miembro registra que alguien le transfirió dinero a otro (quién pagó, quién recibió, monto y fecha), a mano o con un clic desde la transferencia sugerida. El balance descuenta esos pagos. |
-| RF-17 | Tareas | El miembro crea tareas con título, responsable y fecha límite, las marca como hechas o pendientes y las elimina. Una tarea pendiente con fecha vencida se marca como vencida. |
+| RF-17 | Historial mes a mes | El balance muestra una tabla con el total de cada mes, el monto por persona y la variación en porcentaje respecto del mes anterior. Al tocar un mes se filtra el balance. |
+| RF-18 | Tareas | El miembro crea tareas con título, responsable y fecha límite, las marca como hechas o pendientes y las elimina. Una tarea pendiente con fecha vencida se marca como vencida. |
+| RF-19 | Datos de ejemplo | En un hogar vacío, el miembro puede cargar un conjunto de datos de ejemplo (cuatro miembros más, tres meses de gastos, pagos y tareas) para recorrer la aplicación. Existe además una cuenta demo accesible desde el inicio de sesión. |
 
 ## Requisitos no funcionales
 

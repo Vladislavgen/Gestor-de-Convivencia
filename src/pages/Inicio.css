@@ -7,6 +7,20 @@
   white-space: nowrap;
 }
 
+.inicio-demo {
+  background: var(--color-primario-suave);
+  border-color: var(--color-primario-suave);
+}
+
+.inicio-demo h2 {
+  margin-bottom: 0.25rem;
+}
+
+.inicio-demo .ayuda {
+  margin: 0;
+  max-width: 60ch;
+}
+
 .inicio-ia {
   border-style: dashed;
   border-color: var(--color-primario);

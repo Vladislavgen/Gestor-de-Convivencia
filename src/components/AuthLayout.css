@@ -99,6 +99,11 @@
   background: var(--color-borde);
 }
 
+.auth-demo-ayuda {
+  text-align: center;
+  margin-top: 0.4rem;
+}
+
 .auth-link {
   margin: 1.5rem 0 0;
   text-align: center;

@@ -14,8 +14,14 @@ Trabajo práctico para la materia **Plataformas de Desarrollo** (Parcial 2).
 - Resumen del mes generado con Gemini: en qué se fue la plata y un consejo para el mes siguiente.
 - Balance del hogar: cuánto pagó cada uno, cuánto le corresponde, gastos por categoría y las transferencias para saldar las cuentas, por mes o en total.
 - Pagos entre miembros: cuando alguien transfiere plata a otro, se registra y el balance se actualiza.
+- Historial mes a mes: total del hogar, por persona y variación respecto del mes anterior.
 - Tareas de la casa con responsable, fecha límite y estado (pendiente, hecha, vencida).
+- Datos de ejemplo: con un clic se carga un hogar de cinco personas con tres meses de gastos, pagos y tareas.
 - Diseño responsive para usar desde el celular.
+
+## Probar la aplicación
+
+En la pantalla de inicio de sesión, el botón **Probar con la cuenta demo** entra a un hogar ya cargado (cinco personas, tres meses de movimientos). También se puede crear una cuenta propia y, desde el inicio, cargar los datos de ejemplo en un hogar nuevo.
 
 ## Tecnologías
 

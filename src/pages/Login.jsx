@@ -7,6 +7,10 @@ import { useAuth } from "../context/AuthContext";
 import { traducirError } from "../utils/errores";
 import AuthLayout from "../components/AuthLayout";
 
+// Cuenta de prueba con un hogar ya cargado, para recorrer la app sin registrarse
+const DEMO_EMAIL = "demo@gestorconvivencia.com";
+const DEMO_PASSWORD = "demo1234";
+
 function Login() {
   const { usuario } = useAuth();
   const navigate = useNavigate();
@@ -33,6 +37,19 @@ function Login() {
     setEnviando(true);
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
+      navigate("/");
+    } catch (err) {
+      setError(traducirError(err.code));
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  const loginDemo = async () => {
+    setError("");
+    setEnviando(true);
+    try {
+      await signInWithEmailAndPassword(auth, DEMO_EMAIL, DEMO_PASSWORD);
       navigate("/");
     } catch (err) {
       setError(traducirError(err.code));
@@ -104,6 +121,18 @@ function Login() {
       >
         Ingresar con Google
       </button>
+
+      <button
+        type="button"
+        className="btn btn-secundario"
+        onClick={loginDemo}
+        disabled={enviando}
+      >
+        Probar con la cuenta demo
+      </button>
+      <p className="ayuda auth-demo-ayuda">
+        Un hogar de cinco personas con tres meses de gastos ya cargados.
+      </p>
 
       <p className="auth-link">
         ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
