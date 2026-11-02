@@ -1,0 +1,39 @@
+.hogar-intro {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.hogar-codigo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.hogar-codigo span {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 0.4rem 0.8rem;
+  background: var(--color-fondo);
+  border-radius: var(--radio);
+}
+
+.hogar-miembros {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hogar-miembros li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.hogar-miembros li:last-child {
+  border-bottom: none;
+}
