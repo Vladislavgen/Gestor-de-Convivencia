@@ -171,6 +171,9 @@ function Hogar() {
             <ul className="hogar-miembros">
               {hogar.miembros.map((miembro) => (
                 <li key={miembro.uid}>
+                  <span className="avatar">
+                    {miembro.nombre.charAt(0).toUpperCase()}
+                  </span>
                   {miembro.nombre}
                   {miembro.uid === hogar.creadoPor && (
                     <span className="badge">creó el hogar</span>

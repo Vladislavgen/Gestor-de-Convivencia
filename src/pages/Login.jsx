@@ -5,7 +5,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, db, googleProvider } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
 import { traducirError } from "../utils/errores";
-import "./Auth.css";
+import AuthLayout from "../components/AuthLayout";
 
 function Login() {
   const { usuario } = useAuth();
@@ -62,55 +62,53 @@ function Login() {
   };
 
   return (
-    <div className="auth">
-      <div className="card auth-card">
-        <h1>Iniciar sesión</h1>
-        <p className="auth-subtitulo">
-          Ingresá para ver los gastos de tu hogar.
-        </p>
+    <AuthLayout
+      titulo="Iniciar sesión"
+      subtitulo="Ingresá para ver los gastos y las tareas de tu hogar."
+    >
+      <form onSubmit={handleSubmit} noValidate>
+        <label htmlFor="email">Correo</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="tu@correo.com"
+          autoComplete="email"
+        />
 
-        <form onSubmit={handleSubmit} noValidate>
-          <label htmlFor="email">Correo</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="tu@correo.com"
-          />
+        <label htmlFor="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+          autoComplete="current-password"
+        />
 
-          <label htmlFor="password">Contraseña</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-          />
+        {error && <p className="error">{error}</p>}
 
-          {error && <p className="error">{error}</p>}
-
-          <button type="submit" className="btn btn-primario" disabled={enviando}>
-            {enviando ? "Ingresando..." : "Ingresar"}
-          </button>
-        </form>
-
-        <div className="auth-separador">o</div>
-
-        <button
-          type="button"
-          className="btn btn-secundario"
-          onClick={loginConGoogle}
-          disabled={enviando}
-        >
-          Ingresar con Google
+        <button type="submit" className="btn btn-primario" disabled={enviando}>
+          {enviando ? "Ingresando..." : "Ingresar"}
         </button>
+      </form>
 
-        <p className="auth-link">
-          ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
-        </p>
-      </div>
-    </div>
+      <div className="auth-separador">o</div>
+
+      <button
+        type="button"
+        className="btn btn-secundario"
+        onClick={loginConGoogle}
+        disabled={enviando}
+      >
+        Ingresar con Google
+      </button>
+
+      <p className="auth-link">
+        ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
+      </p>
+    </AuthLayout>
   );
 }
 

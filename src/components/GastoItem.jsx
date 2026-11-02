@@ -1,13 +1,18 @@
+import { claseCategoria, iconoCategoria } from "../utils/categorias";
 import { formatearFecha, formatearMonto } from "../utils/formato";
 
 function GastoItem({ gasto, nombrePagador, onEditar, onEliminar }) {
   return (
     <li className="gasto-item">
+      <span className={`icono-categoria ${claseCategoria(gasto.categoria)}`}>
+        {iconoCategoria(gasto.categoria)}
+      </span>
+
       <div className="gasto-info">
         <strong>{gasto.concepto}</strong>
         <span className="gasto-detalle">
-          {formatearFecha(gasto.fecha)} · {nombrePagador}{" "}
-          <span className="badge">{gasto.categoria}</span>
+          {formatearFecha(gasto.fecha)} · pagó {nombrePagador} ·{" "}
+          {gasto.categoria}
         </span>
       </div>
 

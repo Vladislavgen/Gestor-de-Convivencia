@@ -5,23 +5,23 @@
   margin-bottom: 0.75rem;
 }
 
-.filtros label {
-  margin-top: 0;
-}
-
 .gasto-lista {
   list-style: none;
-  margin: 0;
+  margin: 0.5rem 0 0;
   padding: 0;
 }
 
 .gasto-item {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.25rem 1rem;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.35rem 0.75rem;
   align-items: center;
-  padding: 0.75rem 0;
+  padding: 0.7rem 0;
   border-bottom: 1px solid var(--color-borde);
+}
+
+.gasto-item:last-child {
+  border-bottom: none;
 }
 
 .gasto-info {
@@ -30,19 +30,25 @@
   min-width: 0;
 }
 
+.gasto-info strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .gasto-detalle {
   font-size: 0.85rem;
   color: var(--color-texto-suave);
 }
 
 .gasto-monto {
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
   text-align: right;
 }
 
 .gasto-acciones {
-  grid-column: 1 / -1;
+  grid-column: 2 / -1;
   display: flex;
   gap: 0.5rem;
 }
@@ -55,7 +61,7 @@
 
 @media (min-width: 761px) {
   .gasto-item {
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: auto 1fr auto auto;
   }
 
   .gasto-acciones {
