@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
-  onSnapshot,
-  orderBy,
-  query,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
+import { useTareas } from "../hooks/useTareas";
 import { formatearFecha, hoy } from "../utils/formato";
 import "./Tareas.css";
 
 function Tareas() {
   const { usuario, hogar } = useAuth();
+  const { tareas, cargando, error: errorCarga } = useTareas(hogar.id);
 
-  const [tareas, setTareas] = useState([]);
-  const [cargando, setCargando] = useState(true);
   const [filtro, setFiltro] = useState("pendientes");
   const [error, setError] = useState("");
 
@@ -29,29 +26,6 @@ function Tareas() {
   const [errorForm, setErrorForm] = useState("");
 
   const coleccionTareas = collection(db, "hogares", hogar.id, "tareas");
-
-  // Escucha las tareas del hogar en tiempo real
-  useEffect(() => {
-    const consulta = query(
-      collection(db, "hogares", hogar.id, "tareas"),
-      orderBy("fechaLimite"),
-    );
-
-    const unsubscribe = onSnapshot(
-      consulta,
-      (snapshot) => {
-        setTareas(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
-        setCargando(false);
-      },
-      (err) => {
-        console.error(err);
-        setError("No se pudieron cargar las tareas");
-        setCargando(false);
-      },
-    );
-
-    return unsubscribe;
-  }, [hogar.id]);
 
   const nombreDe = (uid) => {
     const miembro = hogar.miembros.find((m) => m.uid === uid);
@@ -65,8 +39,8 @@ function Tareas() {
       setErrorForm("Escribí qué hay que hacer");
       return;
     }
-    if (!fechaLimite) {
-      setErrorForm("Elegí una fecha límite");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(fechaLimite)) {
+      setErrorForm("Elegí una fecha límite válida");
       return;
     }
 
@@ -117,9 +91,20 @@ function Tareas() {
 
   const estaVencida = (tarea) => !tarea.hecha && tarea.fechaLimite < hoy();
 
+  const pendientes = tareas.filter((t) => !t.hecha).length;
+  const vencidas = tareas.filter(estaVencida).length;
+
   return (
     <div className="tareas">
-      <h1>Tareas de {hogar.nombre}</h1>
+      <div className="encabezado">
+        <div>
+          <h1>Tareas de {hogar.nombre}</h1>
+          <p>
+            {pendientes} {pendientes === 1 ? "pendiente" : "pendientes"}
+            {vencidas > 0 && `, ${vencidas} ${vencidas === 1 ? "vencida" : "vencidas"}`}
+          </p>
+        </div>
+      </div>
 
       <div className="grid-2">
         <form className="card" onSubmit={agregarTarea} noValidate>
@@ -173,35 +158,33 @@ function Tareas() {
           <div className="tareas-encabezado">
             <h2>Lista</h2>
             <div className="tareas-filtros">
-              <button
-                type="button"
-                className={`btn btn-chico ${filtro === "pendientes" ? "btn-primario" : "btn-secundario"}`}
-                onClick={() => setFiltro("pendientes")}
-              >
-                Pendientes
-              </button>
-              <button
-                type="button"
-                className={`btn btn-chico ${filtro === "hechas" ? "btn-primario" : "btn-secundario"}`}
-                onClick={() => setFiltro("hechas")}
-              >
-                Hechas
-              </button>
-              <button
-                type="button"
-                className={`btn btn-chico ${filtro === "todas" ? "btn-primario" : "btn-secundario"}`}
-                onClick={() => setFiltro("todas")}
-              >
-                Todas
-              </button>
+              {[
+                ["pendientes", "Pendientes"],
+                ["hechas", "Hechas"],
+                ["todas", "Todas"],
+              ].map(([valor, etiqueta]) => (
+                <button
+                  key={valor}
+                  type="button"
+                  className={`btn btn-chico ${filtro === valor ? "btn-primario" : "btn-secundario"}`}
+                  onClick={() => setFiltro(valor)}
+                >
+                  {etiqueta}
+                </button>
+              ))}
             </div>
           </div>
 
           {cargando && <p className="cargando">Cargando tareas...</p>}
+          {errorCarga && <p className="error">{errorCarga}</p>}
           {error && <p className="error">{error}</p>}
 
           {!cargando && tareasFiltradas.length === 0 && (
-            <p className="vacio">No hay tareas para mostrar.</p>
+            <p className="vacio">
+              {tareas.length === 0
+                ? "Todavía no hay tareas. Agregá la primera con el formulario."
+                : "No hay tareas en esta lista."}
+            </p>
           )}
 
           <ul className="tarea-lista">
@@ -219,7 +202,7 @@ function Tareas() {
                 <div className="tarea-info">
                   <strong>{tarea.titulo}</strong>
                   <span className="tarea-detalle">
-                    {nombreDe(tarea.responsable)} · vence{" "}
+                    {nombreDe(tarea.responsable)}, vence{" "}
                     {formatearFecha(tarea.fechaLimite)}
                     {estaVencida(tarea) && (
                       <span className="badge badge-error">Vencida</span>

@@ -20,3 +20,24 @@ export function hoy() {
   const dia = String(fecha.getDate()).padStart(2, "0");
   return `${fecha.getFullYear()}-${mes}-${dia}`;
 }
+
+const NOMBRES_MESES = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+
+// "2026-10" -> "Octubre 2026"
+export function nombreMes(clave) {
+  const [anio, mes] = clave.split("-");
+  return `${NOMBRES_MESES[Number(mes) - 1]} ${anio}`;
+}

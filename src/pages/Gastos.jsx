@@ -24,6 +24,7 @@ function Gastos() {
   const [gastoEditando, setGastoEditando] = useState(null);
   const [borradorIA, setBorradorIA] = useState(null);
   const [contadorBorradores, setContadorBorradores] = useState(0);
+  const [busqueda, setBusqueda] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("Todas");
   const [filtroMiembro, setFiltroMiembro] = useState("Todos");
   const [errorGuardar, setErrorGuardar] = useState("");
@@ -98,19 +99,31 @@ function Gastos() {
   }
 
   // Filtros en memoria sobre la lista que viene de Firestore
+  const texto = busqueda.trim().toLowerCase();
   const gastosFiltrados = gastos.filter((gasto) => {
+    const coincideTexto =
+      texto === "" || gasto.concepto.toLowerCase().includes(texto);
     const coincideCategoria =
       filtroCategoria === "Todas" || gasto.categoria === filtroCategoria;
     const coincideMiembro =
       filtroMiembro === "Todos" || gasto.pagadoPor === filtroMiembro;
-    return coincideCategoria && coincideMiembro;
+    return coincideTexto && coincideCategoria && coincideMiembro;
   });
 
   const totalFiltrado = gastosFiltrados.reduce((acc, g) => acc + g.monto, 0);
+  const totalGeneral = gastos.reduce((acc, g) => acc + g.monto, 0);
 
   return (
     <div className="gastos">
-      <h1>Gastos de {hogar.nombre}</h1>
+      <div className="encabezado">
+        <div>
+          <h1>Gastos de {hogar.nombre}</h1>
+          <p>
+            {gastos.length} {gastos.length === 1 ? "gasto cargado" : "gastos cargados"},{" "}
+            {formatearMonto(totalGeneral)} en total
+          </p>
+        </div>
+      </div>
 
       <div className="grid-2">
         <div className="card">
@@ -140,6 +153,15 @@ function Gastos() {
 
         <div className="card">
           <h2>Historial</h2>
+
+          <label htmlFor="busqueda">Buscar</label>
+          <input
+            id="busqueda"
+            type="search"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            placeholder="Supermercado, luz, internet..."
+          />
 
           <div className="filtros">
             <div>
@@ -180,8 +202,8 @@ function Gastos() {
           {!cargando && gastosFiltrados.length === 0 && (
             <p className="vacio">
               {gastos.length === 0
-                ? "Todavía no hay gastos cargados."
-                : "No hay gastos con esos filtros."}
+                ? "Todavía no hay gastos. Cargá el primero con el formulario o con la IA."
+                : "No hay gastos que coincidan con la búsqueda."}
             </p>
           )}
 
@@ -200,7 +222,7 @@ function Gastos() {
               </ul>
               <p className="gasto-total">
                 {gastosFiltrados.length}{" "}
-                {gastosFiltrados.length === 1 ? "gasto" : "gastos"} · Total:{" "}
+                {gastosFiltrados.length === 1 ? "gasto" : "gastos"}, total{" "}
                 <strong>{formatearMonto(totalFiltrado)}</strong>
               </p>
             </>
