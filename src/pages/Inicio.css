@@ -1,0 +1,39 @@
+.inicio .resumen .card:hover {
+  border-color: var(--color-primario);
+}
+
+.inicio-monto {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.inicio-ia {
+  border-style: dashed;
+  border-color: var(--color-primario);
+  background: #f6faf8;
+}
+
+.inicio-ia-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.inicio-ia-encabezado h2 {
+  margin-bottom: 0.2rem;
+}
+
+.inicio-ia-encabezado .ayuda {
+  margin: 0;
+}
+
+.inicio-resumen {
+  margin: 1rem 0 0;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-chico);
+  line-height: 1.6;
+}
