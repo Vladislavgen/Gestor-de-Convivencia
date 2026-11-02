@@ -83,6 +83,34 @@ function calcularTransferencias(saldos) {
   return transferencias;
 }
 
+// Historial mes a mes: total, cantidad de gastos y variación contra el mes anterior.
+// Devuelve los meses del más nuevo al más viejo.
+export function resumenPorMes(gastos) {
+  const porMes = {};
+
+  gastos.forEach((gasto) => {
+    const mes = gasto.fecha.slice(0, 7); // "YYYY-MM"
+    if (!porMes[mes]) {
+      porMes[mes] = { mes, total: 0, cantidad: 0 };
+    }
+    porMes[mes].total += gasto.monto;
+    porMes[mes].cantidad += 1;
+  });
+
+  const meses = Object.values(porMes).sort((a, b) => a.mes.localeCompare(b.mes));
+
+  // Variación en porcentaje respecto del mes anterior (null para el primero)
+  meses.forEach((item, indice) => {
+    const anterior = meses[indice - 1];
+    item.variacion =
+      anterior && anterior.total > 0
+        ? ((item.total - anterior.total) / anterior.total) * 100
+        : null;
+  });
+
+  return meses.reverse();
+}
+
 // Total gastado por categoría, de mayor a menor
 export function totalPorCategoria(gastos) {
   const totales = {};

@@ -55,6 +55,22 @@
   border-radius: 999px;
 }
 
+.tabla-scroll {
+  overflow-x: auto;
+}
+
+.enlace {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-primario);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .pagos-lista {
   margin-top: 1rem;
   border-top: 1px solid var(--color-borde);

@@ -10,7 +10,7 @@ import { db } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
 import { useGastos } from "../hooks/useGastos";
 import { usePagos } from "../hooks/usePagos";
-import { calcularBalance, totalPorCategoria } from "../utils/balance";
+import { calcularBalance, resumenPorMes, totalPorCategoria } from "../utils/balance";
 import { claseCategoria, iconoCategoria } from "../utils/categorias";
 import { formatearFecha, formatearMonto, hoy, nombreMes } from "../utils/formato";
 import "./Balance.css";
@@ -47,6 +47,8 @@ function Balance() {
   const balance = calcularBalance(gastosDelMes, pagosDelMes, hogar.miembros);
   const porCategoria = totalPorCategoria(gastosDelMes);
   const mayorCategoria = porCategoria.length > 0 ? porCategoria[0].total : 0;
+  const historial = resumenPorMes(gastos);
+  const cantidadMiembros = hogar.miembros.length || 1;
 
   const guardarPago = async (datos) => {
     setErrorForm("");
@@ -380,6 +382,65 @@ function Balance() {
           )}
         </div>
       </div>
+
+      {historial.length > 1 && (
+        <div className="card">
+          <h2>Mes a mes</h2>
+          <p className="ayuda">
+            Cuánto gastó el hogar cada mes y cómo cambió respecto del mes anterior.
+          </p>
+          <div className="tabla-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th className="numero">Gastos</th>
+                  <th className="numero">Total</th>
+                  <th className="numero">Por persona</th>
+                  <th className="numero">Vs. mes anterior</th>
+                </tr>
+              </thead>
+              <tbody>
+                {historial.map((item) => (
+                  <tr key={item.mes}>
+                    <td>
+                      <button
+                        type="button"
+                        className="enlace"
+                        onClick={() => setMes(item.mes)}
+                      >
+                        {nombreMes(item.mes)}
+                      </button>
+                      {item.mes === hoy().slice(0, 7) && (
+                        <span className="badge">en curso</span>
+                      )}
+                    </td>
+                    <td className="numero">{item.cantidad}</td>
+                    <td className="numero">{formatearMonto(item.total)}</td>
+                    <td className="numero">{formatearMonto(item.total / cantidadMiembros)}</td>
+                    <td
+                      className={`numero ${
+                        item.variacion === null
+                          ? ""
+                          : item.variacion > 0
+                            ? "negativo"
+                            : "positivo"
+                      }`}
+                    >
+                      {item.variacion === null
+                        ? "—"
+                        : `${item.variacion > 0 ? "+" : ""}${Math.round(item.variacion)} %`}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="ayuda">
+            Tocá un mes para ver su balance. En rojo: se gastó más que el mes anterior.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
