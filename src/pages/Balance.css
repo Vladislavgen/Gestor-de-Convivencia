@@ -1,69 +1,84 @@
-.balance-encabezado {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-
-.balance-encabezado h1 {
-  margin: 0;
-}
-
-.balance-encabezado label {
-  margin-top: 0;
-}
-
-.balance-encabezado select {
+.encabezado select {
   width: auto;
   min-width: 200px;
 }
 
-.balance-resumen {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.balance-resumen .card {
-  margin-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.balance-resumen strong {
-  font-size: 1.4rem;
-}
-
-.balance-etiqueta {
-  font-size: 0.85rem;
-  color: var(--color-texto-suave);
-}
-
-.balance-transferencias {
+.categorias {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
-.balance-transferencias li {
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--color-borde);
+.categorias li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.balance-transferencias li:last-child {
-  border-bottom: none;
+.categoria-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.categoria-fila {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+.categoria-monto {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.categoria-porcentaje {
+  font-weight: 400;
+  color: var(--color-texto-suave);
+  font-size: 0.85rem;
+}
+
+.barra {
+  height: 8px;
+  background: var(--color-fondo);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barra-relleno {
+  height: 100%;
+  background: var(--color-primario);
+  border-radius: 999px;
+}
+
+.tabla-scroll {
+  overflow-x: auto;
+}
+
+.enlace {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-primario);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pagos-lista {
+  margin-top: 1rem;
+  border-top: 1px solid var(--color-borde);
+  padding-top: 0.25rem;
 }
 
 @media (max-width: 640px) {
-  .balance-resumen {
-    grid-template-columns: 1fr;
-  }
-
-  .balance-encabezado select {
+  .encabezado select {
     width: 100%;
   }
 }

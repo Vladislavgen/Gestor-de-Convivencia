@@ -1,19 +1,14 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import RutaPrivada from "./components/RutaPrivada";
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
+import Inicio from "./pages/Inicio";
 import Hogar from "./pages/Hogar";
 import Gastos from "./pages/Gastos";
 import Balance from "./pages/Balance";
 import Tareas from "./pages/Tareas";
-
-// La página inicial solo decide a dónde mandar al usuario
-function Inicio() {
-  const { perfil } = useAuth();
-  return <Navigate to={perfil?.hogarId ? "/gastos" : "/hogar"} replace />;
-}
 
 function App() {
   return (
@@ -28,7 +23,7 @@ function App() {
             <Route
               path="/"
               element={
-                <RutaPrivada>
+                <RutaPrivada requiereHogar>
                   <Inicio />
                 </RutaPrivada>
               }
@@ -69,6 +64,9 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
+        <footer className="pie">
+          Gestor de Convivencia, trabajo práctico de Plataformas de Desarrollo (2026)
+        </footer>
       </AuthProvider>
     </BrowserRouter>
   );

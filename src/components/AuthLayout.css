@@ -1,0 +1,137 @@
+.auth {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+  max-width: 900px;
+  margin: 1.5rem auto 0;
+}
+
+.auth-panel {
+  background: var(--color-primario);
+  color: #fff;
+  border-radius: var(--radio);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-panel-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.auth-panel-marca .logo {
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.auth-panel h2 {
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin: 0.5rem 0 0;
+  max-width: 14ch;
+}
+
+.auth-panel-lista {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 34ch;
+}
+
+.auth-ejemplo {
+  margin-top: auto;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radio-chico);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.95rem;
+}
+
+.auth-ejemplo-titulo {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 0.2rem;
+}
+
+.auth-card {
+  margin-bottom: 0;
+  padding: 1.75rem;
+}
+
+.auth-card h1 {
+  margin: 0 0 0.25rem;
+}
+
+.auth-subtitulo {
+  margin: 0 0 1.25rem;
+  color: var(--color-texto-suave);
+}
+
+.auth-card .btn {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.auth-separador {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0.75rem;
+  color: var(--color-texto-suave);
+  font-size: 0.9rem;
+}
+
+.auth-separador::before,
+.auth-separador::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-borde);
+}
+
+.auth-demo-ayuda {
+  text-align: center;
+  margin-top: 0.4rem;
+}
+
+.auth-link {
+  margin: 1.5rem 0 0;
+  text-align: center;
+  color: var(--color-texto-suave);
+}
+
+@media (max-width: 760px) {
+  .auth {
+    grid-template-columns: 1fr;
+    margin-top: 0;
+  }
+
+  .auth-panel {
+    padding: 1.25rem;
+    gap: 0.75rem;
+  }
+
+  .auth-panel h2 {
+    font-size: 1.3rem;
+    max-width: none;
+  }
+
+  .auth-panel-lista,
+  .auth-ejemplo {
+    display: none;
+  }
+
+  .auth-card {
+    padding: 1.25rem;
+  }
+}

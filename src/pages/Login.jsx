@@ -5,7 +5,11 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, db, googleProvider } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
 import { traducirError } from "../utils/errores";
-import "./Auth.css";
+import AuthLayout from "../components/AuthLayout";
+
+// Cuenta de prueba con un hogar ya cargado, para recorrer la app sin registrarse
+const DEMO_EMAIL = "demo@gestorconvivencia.com";
+const DEMO_PASSWORD = "demo1234";
 
 function Login() {
   const { usuario } = useAuth();
@@ -41,6 +45,19 @@ function Login() {
     }
   };
 
+  const loginDemo = async () => {
+    setError("");
+    setEnviando(true);
+    try {
+      await signInWithEmailAndPassword(auth, DEMO_EMAIL, DEMO_PASSWORD);
+      navigate("/");
+    } catch (err) {
+      setError(traducirError(err.code));
+    } finally {
+      setEnviando(false);
+    }
+  };
+
   const loginConGoogle = async () => {
     setError("");
     setEnviando(true);
@@ -62,55 +79,65 @@ function Login() {
   };
 
   return (
-    <div className="auth">
-      <div className="card auth-card">
-        <h1>Iniciar sesión</h1>
-        <p className="auth-subtitulo">
-          Ingresá para ver los gastos de tu hogar.
-        </p>
+    <AuthLayout
+      titulo="Iniciar sesión"
+      subtitulo="Ingresá para ver los gastos y las tareas de tu hogar."
+    >
+      <form onSubmit={handleSubmit} noValidate>
+        <label htmlFor="email">Correo</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="tu@correo.com"
+          autoComplete="email"
+        />
 
-        <form onSubmit={handleSubmit} noValidate>
-          <label htmlFor="email">Correo</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="tu@correo.com"
-          />
+        <label htmlFor="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+          autoComplete="current-password"
+        />
 
-          <label htmlFor="password">Contraseña</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-          />
+        {error && <p className="error">{error}</p>}
 
-          {error && <p className="error">{error}</p>}
-
-          <button type="submit" className="btn btn-primario" disabled={enviando}>
-            {enviando ? "Ingresando..." : "Ingresar"}
-          </button>
-        </form>
-
-        <div className="auth-separador">o</div>
-
-        <button
-          type="button"
-          className="btn btn-secundario"
-          onClick={loginConGoogle}
-          disabled={enviando}
-        >
-          Ingresar con Google
+        <button type="submit" className="btn btn-primario" disabled={enviando}>
+          {enviando ? "Ingresando..." : "Ingresar"}
         </button>
+      </form>
 
-        <p className="auth-link">
-          ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
-        </p>
-      </div>
-    </div>
+      <div className="auth-separador">o</div>
+
+      <button
+        type="button"
+        className="btn btn-secundario"
+        onClick={loginConGoogle}
+        disabled={enviando}
+      >
+        Ingresar con Google
+      </button>
+
+      <button
+        type="button"
+        className="btn btn-secundario"
+        onClick={loginDemo}
+        disabled={enviando}
+      >
+        Probar con la cuenta demo
+      </button>
+      <p className="ayuda auth-demo-ayuda">
+        Un hogar de cinco personas con tres meses de gastos ya cargados.
+      </p>
+
+      <p className="auth-link">
+        ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
+      </p>
+    </AuthLayout>
   );
 }
 

@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
+import Logo from "./Logo";
 import "./Navbar.css";
 
 function Navbar() {
@@ -17,7 +18,8 @@ function Navbar() {
     <header className="navbar">
       <div className="navbar-contenido">
         <Link to="/" className="navbar-marca">
-          Gestor de Convivencia
+          <Logo tamano={30} />
+          <span>Gestor de Convivencia</span>
         </Link>
 
         {usuario && (
@@ -25,6 +27,9 @@ function Navbar() {
             <nav className="navbar-links">
               {hogar && (
                 <>
+                  <NavLink to="/" end>
+                    Inicio
+                  </NavLink>
                   <NavLink to="/gastos">Gastos</NavLink>
                   <NavLink to="/balance">Balance</NavLink>
                   <NavLink to="/tareas">Tareas</NavLink>
@@ -34,7 +39,10 @@ function Navbar() {
             </nav>
 
             <div className="navbar-usuario">
-              <span>{nombreUsuario}</span>
+              <span className="avatar">
+                {nombreUsuario.charAt(0).toUpperCase()}
+              </span>
+              <span className="navbar-nombre">{nombreUsuario}</span>
               <button
                 type="button"
                 className="btn btn-chico btn-secundario"
