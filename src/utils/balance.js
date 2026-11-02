@@ -1,10 +1,15 @@
 // Calcula cuánto pagó cada miembro, cuánto le corresponde y la diferencia.
 // Los gastos se dividen en partes iguales entre todos los miembros.
-export function calcularBalance(gastos, miembros) {
+// Los pagos entre miembros (por ejemplo "Caro le pasó 7000 a Ana") también
+// cuentan: suman al que pagó y restan al que recibió.
+export function calcularBalance(gastos, pagos, miembros) {
   const uids = miembros.map((m) => m.uid);
 
-  // Solo contamos gastos pagados por miembros actuales del hogar
+  // Solo contamos movimientos de miembros actuales del hogar
   const gastosValidos = gastos.filter((g) => uids.includes(g.pagadoPor));
+  const pagosValidos = pagos.filter(
+    (p) => uids.includes(p.de) && uids.includes(p.a),
+  );
 
   const total = gastosValidos.reduce((acc, g) => acc + g.monto, 0);
   const corresponde = miembros.length > 0 ? total / miembros.length : 0;
@@ -14,12 +19,23 @@ export function calcularBalance(gastos, miembros) {
       .filter((g) => g.pagadoPor === miembro.uid)
       .reduce((acc, g) => acc + g.monto, 0);
 
+    const pagosHechos = pagosValidos
+      .filter((p) => p.de === miembro.uid)
+      .reduce((acc, p) => acc + p.monto, 0);
+
+    const pagosRecibidos = pagosValidos
+      .filter((p) => p.a === miembro.uid)
+      .reduce((acc, p) => acc + p.monto, 0);
+
     return {
       uid: miembro.uid,
       nombre: miembro.nombre,
       pago,
+      pagosHechos,
+      pagosRecibidos,
       corresponde,
-      diferencia: pago - corresponde, // positivo: le deben, negativo: debe
+      // positivo: le deben, negativo: debe
+      diferencia: pago - corresponde + pagosHechos - pagosRecibidos,
     };
   });
 
@@ -36,11 +52,11 @@ export function calcularBalance(gastos, miembros) {
 function calcularTransferencias(saldos) {
   const deudores = saldos
     .filter((s) => s.diferencia < -0.01)
-    .map((s) => ({ nombre: s.nombre, resto: -s.diferencia }));
+    .map((s) => ({ uid: s.uid, nombre: s.nombre, resto: -s.diferencia }));
 
   const acreedores = saldos
     .filter((s) => s.diferencia > 0.01)
-    .map((s) => ({ nombre: s.nombre, resto: s.diferencia }));
+    .map((s) => ({ uid: s.uid, nombre: s.nombre, resto: s.diferencia }));
 
   const transferencias = [];
   let i = 0;
@@ -51,7 +67,9 @@ function calcularTransferencias(saldos) {
 
     transferencias.push({
       de: deudores[i].nombre,
+      deUid: deudores[i].uid,
       a: acreedores[j].nombre,
+      aUid: acreedores[j].uid,
       monto: Math.round(monto * 100) / 100,
     });
 
@@ -63,4 +81,17 @@ function calcularTransferencias(saldos) {
   }
 
   return transferencias;
+}
+
+// Total gastado por categoría, de mayor a menor
+export function totalPorCategoria(gastos) {
+  const totales = {};
+
+  gastos.forEach((gasto) => {
+    totales[gasto.categoria] = (totales[gasto.categoria] || 0) + gasto.monto;
+  });
+
+  return Object.keys(totales)
+    .map((categoria) => ({ categoria, total: totales[categoria] }))
+    .sort((a, b) => b.total - a.total);
 }
